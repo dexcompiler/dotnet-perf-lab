@@ -400,18 +400,33 @@ static class Scaffold
 
     static string? FindSolution(string start)
     {
+        var root = new DirectoryInfo(start);
+        while (root is not null && !Path.Exists(Path.Combine(root.FullName, ".git")))
+        {
+            root = root.Parent;
+        }
+
+        if (root is null)
+        {
+            return null; // Outside Git, only an explicit --solution can establish ownership.
+        }
+
         for (var dir = new DirectoryInfo(start); dir is not null; dir = dir.Parent)
         {
             var solutions = dir.GetFiles("*.sln").Concat(dir.GetFiles("*.slnx")).ToList();
             if (solutions.Count == 1)
+            {
                 return solutions[0].FullName;
+            }
             if (solutions.Count > 1)
             {
                 Console.WriteLine($"  Several solutions in {dir.FullName}; pass --solution to choose one.");
                 return null;
             }
-            if (Directory.Exists(Path.Combine(dir.FullName, ".git")) || File.Exists(Path.Combine(dir.FullName, ".git")))
-                return null; // do not search beyond the repository root
+            if (dir.FullName == root.FullName)
+            {
+                break;
+            }
         }
 
         return null;
