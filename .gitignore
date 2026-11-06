@@ -1,0 +1,7 @@
+**/bin/
+**/obj/
+**/__pycache__/
+/artifacts/
+BenchmarkDotNet.Artifacts/
+*.nettrace
+*.etlx

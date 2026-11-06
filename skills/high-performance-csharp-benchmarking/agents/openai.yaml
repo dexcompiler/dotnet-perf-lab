@@ -1,0 +1,4 @@
+interface:
+  display_name: "High Performance C# Benchmarking"
+  short_description: "Rigorous BenchmarkDotNet performance workflow"
+  default_prompt: "Use $high-performance-csharp-benchmarking to design and validate a BenchmarkDotNet optimization loop for this C# hot path."
